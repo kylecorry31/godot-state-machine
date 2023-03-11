@@ -1,5 +1,5 @@
 # godot-state-machine
-A state machine plugin for Godot 4
+A state machine plugin for Godot 4. Supports heirarchical state machines
 
 ## Getting started
 Add the addons folder to your project and enable the plugin under project settings.
