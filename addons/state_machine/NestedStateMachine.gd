@@ -4,43 +4,25 @@ extends StateMachineState
 
 @export var initial_state: String
 
-var states: Array[StateMachineState] = []
-var state: StateMachineState = null
+var state_machine: StateMachineLogic
 
 func _ready():
+	var states: Array[StateMachineState] = []
 	for child in get_children():
 		if child is StateMachineState:
 			states.append(child)
+	
+	state_machine = StateMachineLogic.new(states)
 
 func enter():
 	if initial_state != null:
-		transition_to(initial_state)
-	
-	if state == null:
-		state = states[0]
-	
-	state.enter()
+		state_machine.transition_to(initial_state)
+	else:
+		state_machine.transition_to(state_machine.states[0].get_state_name())
 
 func exit():
-	if state != null:
-		state.exit()
-	state = null
+	state_machine.stop()
 
 func process(delta: float) -> String:
-	if state != null:
-		var new_state = state.process(delta)
-		transition_to(new_state)
+	state_machine.process(delta)
 	return get_state_name()
-
-func transition_to(state_name: String):
-	if state != null and state.get_state_name() == state_name:
-		return
-	
-	if state != null:
-		state.exit()
-	
-	var filtered = states.filter(func (it: StateMachineState): return it.get_state_name() == state_name)
-	
-	if filtered.size() > 0:
-		state = filtered[0]
-		state.enter()

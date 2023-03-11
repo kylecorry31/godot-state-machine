@@ -2,6 +2,8 @@
 class_name StateMachineState
 extends Node
 
+const PREVIOUS_STATE: String = "__previous_state__"
+
 @export var state_name: String
 
 func get_state_name() -> String:
